@@ -14,6 +14,18 @@ function App() {
       .number()
       .typeError('Veuillez entre un nombre')
       .min(18, 'Trop jeune'),
+    password: yup
+      .string()
+      .required('Le mot de passe est obligatoire')
+      .min(5, 'Mot de passe trop court')
+      .max(10, 'Mot de passe trop long'),
+    confirmPassword: yup
+      .string()
+      .required('Vous devez confirmer votre mot de passe')
+      .oneOf(
+        [yup.ref('password'), ''],
+        'Les mots de passe ne correspondent pas'
+      ),
   });
 
   const {
@@ -63,7 +75,7 @@ function App() {
           <label htmlFor="password" className="mb-5">
             Mot de passe
           </label>
-          <input id="password" type="text" {...register('password')} />
+          <input id="password" type="password" {...register('password')} />
           {errors?.password && (
             <p style={{ color: 'red' }}>{errors.password.message}</p>
           )}
@@ -74,7 +86,7 @@ function App() {
           </label>
           <input
             id="confirmPassword"
-            type="text"
+            type="password"
             {...register('confirmPassword')}
           />
           {errors?.confirmPassword && (
