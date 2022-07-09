@@ -1,17 +1,30 @@
 import React from 'react';
-import { object } from 'yup';
+import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 function App() {
+  const schema = yup.object({
+    name: yup
+      .string()
+      .required('Le champ est obligatoire')
+      .min(2, 'Trop court')
+      .max(5, 'Trop long'),
+    age: yup
+      .number()
+      .typeError('Veuillez entre un nombre')
+      .min(18, 'Trop jeune'),
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    // mode: 'onBlur',
     defaultValues: {
       name: '',
     },
+    resolver: yupResolver(schema),
   });
 
   function submit(values) {
@@ -28,23 +41,7 @@ function App() {
           <label htmlFor="name" className="mb-5">
             Nom
           </label>
-          <input
-            id="name"
-            type="text"
-            {...register('name', {
-              disabled: false,
-              required: 'Le champ est obligatoire',
-              maxLength: { value: 25, message: 'Trop long !' },
-              minLength: { value: 2, message: 'Trop court !' },
-              validate(value) {
-                if (value === 'Jean') {
-                  return true;
-                } else {
-                  return 'Mauvais prénom';
-                }
-              },
-            })}
-          />
+          <input id="name" type="text" {...register('name')} />
           {errors?.name && (
             <p style={{ color: 'red' }}>{errors.name.message}</p>
           )}
@@ -58,7 +55,6 @@ function App() {
             type="number"
             {...register('age', {
               valueAsNumber: true,
-              required: 'Champ requis',
             })}
           />
           {errors?.age && <p style={{ color: 'red' }}>{errors.age.message}</p>}
