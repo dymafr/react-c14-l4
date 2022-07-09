@@ -59,6 +59,28 @@ function App() {
           />
           {errors?.age && <p style={{ color: 'red' }}>{errors.age.message}</p>}
         </div>
+        <div className="d-flex flex-column mb-20">
+          <label htmlFor="password" className="mb-5">
+            Mot de passe
+          </label>
+          <input id="password" type="text" {...register('password')} />
+          {errors?.password && (
+            <p style={{ color: 'red' }}>{errors.password.message}</p>
+          )}
+        </div>
+        <div className="d-flex flex-column mb-20">
+          <label htmlFor="confirmPassword" className="mb-5">
+            Confirmation du mot de passe
+          </label>
+          <input
+            id="confirmPassword"
+            type="text"
+            {...register('confirmPassword')}
+          />
+          {errors?.confirmPassword && (
+            <p style={{ color: 'red' }}>{errors.confirmPassword.message}</p>
+          )}
+        </div>
         <button className="btn btn-primary">Sauvegarder</button>
       </form>
     </div>
